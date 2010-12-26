@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}downloadar:login{% endblock %}
+
+{% block status %}downloadar: <span class="action">login</span>{% if form.errors %}: <span class="error login_error">access denied</span>{% endif %}{% endblock %}
+
+{% block content %}
+<div class="login_form">
+    <form id="login_form" method="post" action="">
+        {% csrf_token %}
+        <fieldset>
+            <div class="form_field">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            </div>
+            <div class="form_field">
+            {{ form.password.label_tag }}
+            {{ form.password }}
+            </div>
+        </fieldset>
+        <div class="submit_row">
+            <input type="submit" value="Log in" />
+        </div>
+    </form>
+    <script type="text/javascript">
+    $('#login_form input[type="text"]:first').focus();
+    </script>
+</div>
+{% endblock %}

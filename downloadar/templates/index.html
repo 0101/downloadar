@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<div id="filter"></div>
+{% endblock %}
+
+{% block content %}
+<div class="content_wrap">
+    <div class="half_wrap">
+        <div id="list"></div>
+    </div>
+    <div class="half_wrap">
+        <div id="details"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+//<![CDATA[
+(function(){
+
+    var FEEDS = {{ feeds|safe }};
+
+    var list = $('#list').entryList({
+        urls: {get_entries: '{% url dlr:get_entries %}'}
+    });
+
+    var filter = $('#filter').entryFilter({
+        feeds: FEEDS,
+        list: list,
+        urls: {select: '{% url dlr:select %}',
+               unselect: '{% url dlr:unselect %}'}
+    });
+
+})();
+//]]>
+</script>
+
+{% endblock %}

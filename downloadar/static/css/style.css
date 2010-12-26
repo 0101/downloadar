@@ -1,0 +1,98 @@
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+header, section, article, nav, aside, footer, hgroup, figure, figcaption {
+	border: 0; margin: 0; padding: 0; vertical-align: baseline; font-weight: inherit;
+	font-style: inherit; font-size: 100%; font-family: inherit; cursor:default;}
+
+table {border-collapse: collapse; border-spacing: 0;}
+caption, th, td {text-align: left; font-weight: normal;}
+
+blockquote:before, blockquote:after,
+q:before, q:after {content: "";}
+blockquote, q {quotes: "" "";}
+
+li {list-style-type: none;}
+
+input, select {
+	margin: 0; font-family: "Segoe UI", "Lucida Grande", "Trebuchet MS", sans-serif;
+	font-size: 14px; color: #000;
+}
+
+a {text-decoration: none; color: #7DBBF2; outline:none; cursor:pointer;}
+a * {cursor:pointer;}
+a:hover, a:active, a:focus {color: #FFD13A;}
+a.alt, .alt a {text-decoration: underline;}
+.alt a:hover, .alt a:active, .alt a:focus, a.alt:hover, a.alt:active, a.alt:focus {text-decoration: none;}
+a img {border: none;}
+
+.clearfix:after {content: ".";display: block;height: 0;clear: both;visibility: hidden;}
+
+strong, b {font-weight: bold;}
+em, i {font-style: italic;}
+
+h1, h2, h3, h4 {font-weight: normal;}
+
+header, section, article, nav, aside, footer, hgroup, figure, figcaption {display: block;}
+
+body {
+	font-family:"Segoe UI", "Lucida Grande", "Trebuchet MS", Helvetica, Arial, sans-serif;
+	background:#fafafa;color:#333;font-size:14px;
+}
+
+.button {
+	display:inline-block;padding:3px 15px;font-weight:bold;border:1px solid #333;
+	margin-right:15px;cursor:pointer;
+	border-radius:50px;
+	-moz-border-radius:50px;
+	-webkit-border-radius:50px;
+}
+.button.active {background:#333;color:#ddd;border:none;padding:4px 16px;}
+.button:hover {
+	box-shadow:0 0 5px #333;
+	-moz-box-shadow:0 0 5px #333;
+	-webkit-box-shadow:0 0 5px #333;
+}
+.button.active:hover {
+	color:#fff;
+	box-shadow:none;
+	-moz-box-shadow:none;
+	-webkit-box-shadow:none;
+}
+.button:active {
+	box-shadow:0 0 5px #333 inset;
+	-moz-box-shadow:0 0 5px #333 inset;
+	-webkit-box-shadow:0 0 5px #333 inset;
+}
+.button.loading {
+	background:url('../img/loading_bar.gif') repeat-x;
+	box-shadow:0 0 5px #333 inset;
+	-moz-box-shadow:0 0 5px #333 inset;
+	-webkit-box-shadow:0 0 5px #333 inset;
+}
+
+#main_status {background:#333;color:#ddd;padding:5px;font-weight:bold;}
+#main_status .action {color:#fff;}
+#main_status .error {color:#EA6335;}
+#main_status .login_error {text-decoration:blink;}
+
+#main_controls {float:right;font-weight:bold;}
+#main_controls a {padding:5px 15px;display:inline-block;color:#ddd;}
+#main_controls a:hover {color:#fff;}
+
+#filter {padding:20px 0;border-bottom:1px solid #333;text-align:center;}
+
+#main_content .content_wrap {height:800px;position:relative;}
+#main_content .content_wrap .half_wrap {width:50%;height:100%;float:left;overflow:auto;}
+
+.login_form {width:180px;margin:100px auto;}
+.login_form .form_field {margin:10px 0;}
+.login_form .form_field label {display:block;font-weight:bold;}
+.login_form .form_field input {width:100%;padding:3px;font-family:consolas;font-size:15px;}
+.login_form .submit_row input {font-weight:bold;}

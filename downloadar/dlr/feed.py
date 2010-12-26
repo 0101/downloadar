@@ -52,7 +52,7 @@ class BaseFeed(object):
 
     def filter_entry(self, entry_data):
         """
-        return if given entry is supposed to be in this feed
+        Return if given entry is supposed to be in this feed.
         """
         return True
 
@@ -71,6 +71,7 @@ class BaseFeed(object):
             [(f, getattr(self, 'get_entry_' + f, default)(entry_data))
                 for f in fields]
         ))
+        entry.feed = self.__class__.get_id()
         try:
             # TODO: special treatment of duplicate entries
             entry.full_clean()
@@ -82,6 +83,9 @@ class BaseFeed(object):
             entry.save()
 
     def get_entry_uid(self, entry_data):
+        """
+        Return a unique identifier for the entry. Used to avoid duplicates.
+        """
         dl_url = self.get_entry_download_url(entry_data)
         if not dl_url:
             raise NotImplementedError('%s must implement get_entry_uid '
@@ -100,5 +104,10 @@ class BaseFeed(object):
         return url.replace(' ', '%20') if url else None
 
     def get_entry_content_json(self, entry_data):
+        """
+        Return a JSON-serialized dictionary that will be used as a context
+        for rendering this entry's template.
+        """
         summary = getattr(entry_data, 'summary', None)
-        return json.dumps({'summary': summary}) if summary else None
+        if summary is not None:
+            return json.dumps({'summary': summary}, ensure_ascii=False)

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+	<head>
+		<meta charset="utf-8" />
+		<title>{% block title %}{{ user.username }}@downloadar{% endblock %}</title>
+		<link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" media="screen,projection" />
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.4.4.min.js"></script>
+	</head>
+
+	<body>
+		<header id="main_header">
+			{% if user.is_authenticated %}
+			<div id="main_controls"><a href="{% url logout %}">logout</a></div>
+			{% endif %}
+			<div id="main_status" class="status">{% block status %}{% if user.is_authenticated %}{{ user.username }}@{% endif %}downloadar{% endblock %}</div>
+			{% block header %}{% endblock %}
+		</header>
+
+		<div id="main_content">
+		{% block content %}{% endblock %}
+		</div>
+
+		<script type="text/javascript">
+		var STATIC_URL = '{{ STATIC_URL }}';
+		</script>
+
+		<script type="text/javascript" src="{{ STATIC_URL }}js/style.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/list.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/filter.js"></script>
+		{% block js %}{% endblock %}
+	</body>
+</html>

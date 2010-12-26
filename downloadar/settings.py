@@ -71,7 +71,9 @@ STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # A list of locations of additional static files
-STATICFILES_DIRS = ()
+STATICFILES_DIRS = (
+    STATIC_ROOT,
+)
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -97,9 +99,10 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'dlr.middleware.LoginRequiredMiddleware',
 )
 
-ROOT_URLCONF = 'downloader.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -145,6 +148,11 @@ LOGGING = {
         },
     }
 }
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+
+AUTH_PROFILE_MODULE = 'dlr.UserProfile'
 
 try:
     from settings_local import *
