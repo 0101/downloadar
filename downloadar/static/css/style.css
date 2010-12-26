@@ -47,13 +47,21 @@ body {
 }
 
 .button {
-	display:inline-block;padding:3px 15px;font-weight:bold;border:1px solid #333;
+	display:inline-block;padding:3px 15px;font-weight:bold;border:1px solid #aaa;
 	margin-right:15px;cursor:pointer;
 	border-radius:50px;
 	-moz-border-radius:50px;
 	-webkit-border-radius:50px;
+	box-shadow:0 0 4px #999;
+	-moz-box-shadow:0 0 4px #999;
+	-webkit-box-shadow:0 0 4px #999;
 }
-.button.active {background:#333;color:#ddd;border:none;padding:4px 16px;}
+.button.active {
+	background:#333;color:#ddd;border:none;padding:4px 16px;
+	box-shadow:none;
+	-moz-box-shadow:none;
+	-webkit-box-shadow:none;
+}
 .button:hover {
 	box-shadow:0 0 5px #333;
 	-moz-box-shadow:0 0 5px #333;
@@ -77,6 +85,19 @@ body {
 	-webkit-box-shadow:0 0 5px #333 inset;
 }
 
+#list .more_button {
+	display:block;margin:0;border-width:1px 0 0;text-align:center;border-color:#bbb;
+	border-radius:0px;
+	-moz-border-radius:0px;
+	-webkit-border-radius:0px;
+	box-shadow:none;
+	-moz-box-shadow:none;
+	-webkit-box-shadow:none;
+}
+#list .more_button:hover {background:#eee;}
+#list .more_button.loading {background:url('../img/loading_bar.gif') repeat-x; opacity:0.5;}
+#list .more_button.disabled {display:none;}
+
 #main_status {background:#333;color:#ddd;padding:5px;font-weight:bold;}
 #main_status .action {color:#fff;}
 #main_status .error {color:#EA6335;}
@@ -86,10 +107,13 @@ body {
 #main_controls a {padding:5px 15px;display:inline-block;color:#ddd;}
 #main_controls a:hover {color:#fff;}
 
-#filter {padding:20px 0;border-bottom:1px solid #333;text-align:center;}
+#filter {padding:20px 0;border-bottom:1px solid #ccc;text-align:center;}
 
 #main_content .content_wrap {height:800px;position:relative;}
 #main_content .content_wrap .half_wrap {width:50%;height:100%;float:left;overflow:auto;}
+#main_content .content_wrap .entries .half_wrap_inner {
+	border-right:1px solid #ccc;min-height:100%;
+}
 
 .login_form {width:180px;margin:100px auto;}
 .login_form .form_field {margin:10px 0;}

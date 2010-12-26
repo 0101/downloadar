@@ -1,119 +1,173 @@
 ;(function($){
+
+    var doNothing = function() {};
+
     $.fn.entryList = function(options) {
         var opts = $.extend({}, $.fn.entryList.defaults, options);
 
         return this.each(function() {
             var self = $(this);
-            var list = $('<ul/>').appendTo(self);
-            var loadedFeeds = {};
+            var list = $('<ol/>').appendTo(self);
             var entries = [];
+            var entryMap = {};
+            var moreButton = null;
+            var lastFeedList = [];
+            var currentLimit = 0;
 
-            function fetchEntries(feedList, handler, callback) {
-                callback = callback || function(){};
-
-                var feeds = [];
-                $.each(feedList, function(i, feed) {
-                    if (!(feed in loadedFeeds)) {
-                        feeds.push(feed);
-                        loadedFeeds[feed] = true;
+            var handlers = {
+                pre: {
+                    nothing: function(request) {
+                        return request;
+                    },
+                    unselect: function(request) {
+                        request = handlers.pre.sendLimit(request);
+                        var newEntries = [];
+                        $.each(entries, function(index, entry) {
+                            if ($.inArray(entry.feed, request.feeds) == -1) {
+                                removeEntry(entry);
+                            } else {
+                                newEntries.push(entry);
+                            }
+                        });
+                        entries = newEntries;
+                        return request;
+                    },
+                    more: function(request) {
+                        request.lt = entries[entries.length-1].id;
+                        return request;
+                    },
+                    sendLimit: function(request) {
+                        request.limit = entries.length;
+                        return request;
                     }
-                });
+                },
+                post: {
+                    append: function(newEntries, callback) {
+                        $.each(newEntries, function(i, entry) {
+                            entries.push(entry);
+                            entryMap[entry.id] = entry;
+                            var e = create.entryElement(entry);
+                            entry.element = e;
+                            e.appendTo(list);
+                            e.fadeIn(opts.animationDelay);
+                        });
 
-                if (feeds.length == 0) {
-                    callback();
-                    return;
+                        callback();
+                    },
+                    merge: function(newEntries, callback) {
+                        $.each(newEntries, function(i, entry) {
+                            if (entry.id in entryMap) {
+                                return;
+                            }
+                            entries.push(entry);
+                            entryMap[entry.id] = entry;
+                        });
+
+                        entries.sort(function(x, y){return y.id - x.id});
+
+                        // remove old entries overflowing current limit
+                        var diff = (entries.length - newEntries.length);
+                        for (var i = 0; i < diff; i++) {
+                            var entry = entries.pop();
+                            removeEntry(entry);
+                        }
+
+                        var previous = null;
+
+                        $.each(entries, function(i, entry) {
+                            if (entry.element) {
+                                previous = entry.element;
+                                return;
+                            }
+                            var e = create.entryElement(entry);
+                            entry.element = e;
+                            if (previous) {
+                                e.insertAfter(previous);
+                            } else {
+                                e.prependTo(list);
+                            }
+                            previous = e;
+                            e.fadeIn(opts.animationDelay);
+                        });
+
+                        callback();
+                    }
                 }
+            }
 
-                $.get(opts.urls.get_entries, {feeds: feeds}, function(response) {
-                    handler(response.entries, callback);
+            var create = {
+                entryElement: function(entry) {
+                    return $('<li/>').html(entry.html).data('id', entry.id).hide();
+                },
+                moreButton: function() {
+                    var button = $('<span/>', {
+                        class: 'more_button button disabled',
+                        text: 'moar'
+                    });
+                    button.click(function() {
+                        if (button.is('.disabled') || button.is('.loading')) {
+                            return;
+                        }
+                        button.addClass('loading');
+                        var callback = function() {
+                            button.removeClass('loading');
+                        }
+                        fetchEntries(lastFeedList, handlers.pre.more,
+                                     handlers.post.append, callback);
+                    });
+                    return button;
+                }
+            }
+
+            function removeEntry(entry) {
+                delete entryMap[entry.id];
+                entry.element.remove();
+            }
+
+            function fetchEntries(feedList, preHandler, postHandler, callback) {
+                callback = callback || doNothing;
+
+                var request = preHandler({feeds: feedList});
+
+                $.get(opts.urls.get_entries, request, function(response) {
+
+                    postHandler(response.entries, callback);
+
+                    lastFeedList = feedList;
+
+                    if (response.more) {
+                        moreButton.removeClass('disabled');
+                    } else {
+                        moreButton.addClass('disabled');
+                    }
+
                 }, 'json');
             }
 
-            function mergeEntries(newEntries, callback) {
-
-                entries = entries.concat(newEntries);
-                entries.sort(function(x, y){return y.id - x.id});
-
-                //console.log($.map(entries, function(e){return e.id}));
-
-                var prevElement = null;
-                $.each(entries, function(i, entry) {
-                    if (entry.element) {
-                        prevElement = entry.element;
-                    } else {
-                        var e = createElement(entry);
-                        entry.element = e;
-                        if (prevElement) {
-                            e.insertAfter(prevElement);
-                        } else {
-                            e.prependTo(list);
-                        }
-                        prevElement = e;
-                    }
-                });
-
-                callback();
-            }
-
-            function addEntries(newEntries, addFn) {
-                $.each(newEntries, function(i, entry) {
-                    var e = createElement(entry);
-                    entry.element = e;
-                    addFn(e);
-                });
-            }
-
-            function appendEntries(newEntries, callback) {
-                addEntries(newEntries, function(entry) {list.append(entry)} );
-                entries = entries.concat(newEntries);
-            }
-
-            function prependEntries(newEntries, callback) {
-                addEntries(newEntries, function(entry) {list.prepend(entry)} );
-                entries = newEntries.concat(entries);
-            }
-
-            function createElement(entry) {
-                return $('<li/>').html(entry.html).data('id', entry.id);
-            }
-
-            function filter(fn) {
-                $.each(entries, function(i, entry){
-
-                    if (fn(entry)) {
-                        //console.log('filtering entry:', entry.id, entry.title, 'result: show');
-                        entry.element.show();
-                    } else {
-                        //console.log('filtering entry:', entry.id, entry.title, 'result: hide');
-                        entry.element.hide();
-                    }
-                });
-            }
-
             function init() {
-                self.find('li').live('click', function() {
-                    console.log($(this).data('id'));
-                });
+                moreButton = create.moreButton().insertAfter(list);
             }
 
-            self.bind('load_merge', function(event, feedList, callback) {
-                fetchEntries(feedList, mergeEntries, callback);
+            self.bind('fetch_init', function(event, feedList, callback) {
+                fetchEntries(feedList, handlers.pre.nothing,
+                             handlers.post.append, callback);
             });
 
-            self.bind('load_append', function(event, feedList, callback) {
-                fetchEntries(feedList, appendEntries, callback);
+            self.bind('fetch_select', function(event, feedList, callback) {
+                fetchEntries(feedList, handlers.pre.sendLimit,
+                             handlers.post.merge, callback);
             });
 
-            self.bind('load_prepend', function(event, feedList, callback) {
-                fetchEntries(feedList, prependEntries, callback);
+            self.bind('fetch_unselect', function(event, feedList, callback) {
+                fetchEntries(feedList, handlers.pre.unselect,
+                             handlers.post.merge, callback);
             });
 
-            self.bind('filter', function(event, fn) {
-                filter(fn);
-            });
 
             init();
         });
     }
-    $.fn.entryList.defaults = {}
+    $.fn.entryList.defaults = {
+        animationDelay: 100
+    }
 })(jQuery);

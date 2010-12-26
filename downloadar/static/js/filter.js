@@ -8,6 +8,14 @@
             var list = opts.list;
             var activeFeeds = {};
 
+            function getActiveFeedList() {
+                var list = [];
+                for (var id in activeFeeds) {
+                    list.push(id);
+                }
+                return list;
+            }
+
             function createFeedButton(feed) {
                 var button = $('<span/>', {class: 'button', text: feed.name});
                 feed.button = button;
@@ -27,8 +35,8 @@
             function activateFeed(feed) {
                 feed.button.addClass('loading');
                 activeFeeds[feed.id] = true;
-                list.trigger('load_merge', [[feed.id], function() {
-                    filterEntries();
+
+                list.trigger('fetch_select', [getActiveFeedList(), function() {
                     feed.button.removeClass('loading');
                     feed.button.addClass('active');
                 }]);
@@ -37,7 +45,7 @@
 
             function deactivateFeed(feed) {
                 delete activeFeeds[feed.id];
-                filterEntries();
+                list.trigger('fetch_unselect', [getActiveFeedList()]);
                 feed.button.removeClass('active');
                 $.post(opts.urls.unselect, {'feed': feed.id});
             }
@@ -47,7 +55,6 @@
             }
 
             function filterEntries() {
-                //console.log(activeFeeds);
                 list.trigger('filter', [filter]);
             }
 
@@ -62,11 +69,7 @@
                     }
                 });
 
-                activeFeedList = [];
-                for (var id in activeFeeds) {
-                    activeFeedList.push(id);
-                }
-                list.trigger('load_append', [activeFeedList]);
+                list.trigger('fetch_init', [getActiveFeedList()]);
             }
 
             init();

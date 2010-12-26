@@ -15,12 +15,16 @@ def index(request, template='index.html'):
 
 
 def get_entries(request):
-    limit = 10
     feeds = request.GET.getlist('feeds[]')
+    limit = max(int(request.GET.get('limit', 0)), 10)
+    print limit
     gt = request.GET.get('gt')
+    lt = request.GET.get('lt')
     entries = Entry.objects.newest().filter(feed__in=feeds)
     if gt:
         entries = entries.filter(id__gt=gt)
+    if lt:
+        entries = entries.filter(id__lt=lt)
 
     response = {
         'entries': [e.serialize() for e in entries[:limit]],
