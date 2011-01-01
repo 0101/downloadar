@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<title>{% block title %}{{ user.username }}@downloadar{% endblock %}</title>
 		<link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" media="screen,projection" />
-		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.4.4.min.js"></script>
+
 	</head>
 
 	<body>
@@ -24,9 +24,12 @@
 		var STATIC_URL = '{{ STATIC_URL }}';
 		</script>
 
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.4.4.min.js"></script>
+
 		<script type="text/javascript" src="{{ STATIC_URL }}js/style.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/list.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/filter.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/detail_pane.js"></script>
 		{% block js %}{% endblock %}
 	</body>
 </html>

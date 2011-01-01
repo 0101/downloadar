@@ -86,7 +86,7 @@ body {
 }
 
 #list .more_button {
-	display:block;margin:0;border-width:1px 0 0;text-align:center;border-color:#bbb;
+	display:block;margin:0;border-width:1px 0 0;text-align:center;border-color:#bbb;padding:10px 0;
 	border-radius:0px;
 	-moz-border-radius:0px;
 	-webkit-border-radius:0px;
@@ -95,8 +95,22 @@ body {
 	-webkit-box-shadow:none;
 }
 #list .more_button:hover {background:#eee;}
-#list .more_button.loading {background:url('../img/loading_bar.gif') repeat-x; opacity:0.5;}
+#list .more_button.loading {background:url('../img/loading_bar.gif') repeat; opacity:0.3;}
 #list .more_button.disabled {display:none;}
+
+#list .entry {padding:10px;}
+#list .entry .title {font-weight:bold;}
+#list .entry:hover {cursor:pointer;background:#eee;}
+#list .entry:hover * {cursor:pointer;}
+#list .loading .entry {background:#aaa;}
+#list .active .entry {background:#333; color:#ddd;}
+/*#list .active .entry .title {color:#fff;}*/
+#list .loading .entry,
+#list .loading .entry *,
+#list .active .entry,
+#list .active .entry * {cursor:default;}
+
+#list .separator {height:1px; border-top: 3px dashed #ddd;margin-top:3px;}
 
 #main_status {background:#333;color:#ddd;padding:5px;font-weight:bold;}
 #main_status .action {color:#fff;}
@@ -111,8 +125,8 @@ body {
 
 #main_content .content_wrap {height:800px;position:relative;}
 #main_content .content_wrap .half_wrap {width:50%;height:100%;float:left;overflow:auto;}
-#main_content .content_wrap .entries .half_wrap_inner {
-	border-right:1px solid #ccc;min-height:100%;
+#main_content .content_wrap .detail .half_wrap_inner {
+	border-left:1px solid #ccc;min-height:100%;
 }
 
 .login_form {width:180px;margin:100px auto;}
@@ -120,3 +134,6 @@ body {
 .login_form .form_field label {display:block;font-weight:bold;}
 .login_form .form_field input {width:100%;padding:3px;font-family:consolas;font-size:15px;}
 .login_form .submit_row input {font-weight:bold;}
+
+#detail .entry_detail .content {padding:10px;}
+#detail .TorrentBytesX264Feed .summary {font-family:consolas, monospace;}

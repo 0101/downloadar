@@ -11,9 +11,9 @@
             <div id="list"></div>
         </div>
     </div>
-    <div class="half_wrap">
+    <div class="half_wrap detail">
         <div class="half_wrap_inner">
-            <div id="details"></div>
+            <div id="detail"></div>
         </div>
     </div>
 </div>
@@ -21,13 +21,13 @@
 
 {% block js %}
 <script type="text/javascript">
-//<![CDATA[
 (function(){
 
     var FEEDS = {{ feeds|safe }};
 
     var list = $('#list').entryList({
-        urls: {get_entries: '{% url dlr:get_entries %}'}
+        urls: {get_entries: '{% url dlr:get_entries %}'},
+        detailPane: $('#detail').detailPane()
     });
 
     var filter = $('#filter').entryFilter({
@@ -38,7 +38,5 @@
     });
 
 })();
-//]]>
 </script>
-
 {% endblock %}

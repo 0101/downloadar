@@ -13,6 +13,10 @@
             var moreButton = null;
             var lastFeedList = [];
             var currentLimit = 0;
+            var scrollable = opts.getScrollableParent(self);
+            var separator = null;
+            var detailPane = opts.detailPane;
+            var activeEntry = null;
 
             var handlers = {
                 pre: {
@@ -20,6 +24,9 @@
                         return request;
                     },
                     unselect: function(request) {
+                        // set fixed height to prevent jumping
+                        list.height(list.height());
+
                         request = handlers.pre.sendLimit(request);
                         var newEntries = [];
                         $.each(entries, function(index, entry) {
@@ -55,6 +62,9 @@
                         callback();
                     },
                     merge: function(newEntries, callback) {
+                        // set fixed height to prevent jumping
+                        list.height(list.height());
+
                         $.each(newEntries, function(i, entry) {
                             if (entry.id in entryMap) {
                                 return;
@@ -90,6 +100,12 @@
                             e.fadeIn(opts.animationDelay);
                         });
 
+                        if (separator) {
+                            separator.remove();
+                        }
+
+                        list.height('auto');
+
                         callback();
                     }
                 }
@@ -97,7 +113,26 @@
 
             var create = {
                 entryElement: function(entry) {
-                    return $('<li/>').html(entry.html).data('id', entry.id).hide();
+                    var e = $('<li/>').html(entry.html).data('id', entry.id).hide();
+
+                    if (detailPane) {
+                        e.click(function() {
+                            if (e.is('.loading') || e.is('.active')) {
+                                return;
+                            }
+                            e.addClass('loading');
+
+                            detailPane.trigger('display', [entry.url, function() {
+                                e.removeClass('loading');
+                                e.addClass('active');
+                                if (activeEntry) {
+                                    activeEntry.element.removeClass('active');
+                                }
+                                activeEntry = entry;
+                            }]);
+                        });
+                    }
+                    return e;
                 },
                 moreButton: function() {
                     var button = $('<span/>', {
@@ -109,13 +144,29 @@
                             return;
                         }
                         button.addClass('loading');
+
+                        if (scrollable) {
+                            if (!separator) {
+                                separator = create.separator();
+                            }
+                            separator.hide().appendTo(list);
+                        }
+
                         var callback = function() {
                             button.removeClass('loading');
+                            if (scrollable) {
+                                var scrollTo = self.height() - scrollable.height() + 10;
+                                scrollable.animate({scrollTop: scrollTo}, 700);
+                                separator.show();
+                            }
                         }
                         fetchEntries(lastFeedList, handlers.pre.more,
                                      handlers.post.append, callback);
                     });
                     return button;
+                },
+                separator: function() {
+                    return $('<li/>', {class: 'separator'});
                 }
             }
 
@@ -163,11 +214,11 @@
                              handlers.post.merge, callback);
             });
 
-
             init();
         });
     }
     $.fn.entryList.defaults = {
-        animationDelay: 100
+        animationDelay: 100,
+        getScrollableParent: function(self) {return self.parent().parent();}
     }
 })(jQuery);

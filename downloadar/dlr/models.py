@@ -4,6 +4,7 @@ import re
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.fields import FieldDoesNotExist
 from django.db.models.signals import post_save
@@ -38,6 +39,15 @@ class Entry(models.Model):
     def __unicode__(self):
         return self.title
 
+    @property
+    def content(self):
+        return json.loads(self.content_json, encoding='utf-8')
+
+    @property
+    def feed_name(self):
+        from dlr import feed
+        return feed.get(self.feed).name
+
     def clean(self):
         if not self.id:
             self.fetched = datetime.now()
@@ -46,7 +56,7 @@ class Entry(models.Model):
         return '%s/entry.html' % self.feed, 'entry.html'
 
     def render_to_html(self):
-        context = json.loads(self.content_json, encoding='utf-8')
+        context = self.content
         context['entry'] = self
         return render_to_string(self.get_template(), context)
 
@@ -56,6 +66,7 @@ class Entry(models.Model):
             'feed': self.feed,
             'title': self.title,
             'html': self.render_to_html(),
+            'url': reverse('dlr:entry_detail', kwargs={'entry_id': self.id}),
         }
 
 

@@ -1,4 +1,6 @@
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
 from django.utils import simplejson as json
 from django.views.generic.simple import direct_to_template
 
@@ -16,8 +18,7 @@ def index(request, template='index.html'):
 
 def get_entries(request):
     feeds = request.GET.getlist('feeds[]')
-    limit = max(int(request.GET.get('limit', 0)), 10)
-    print limit
+    limit = max(int(request.GET.get('limit', 0)), 15)
     gt = request.GET.get('gt')
     lt = request.GET.get('lt')
     entries = Entry.objects.newest().filter(feed__in=feeds)
@@ -61,3 +62,11 @@ def unselect(request):
         profile.save()
 
     return HttpResponse('ok')
+
+
+def entry_detail(request, entry_id):
+    entry = get_object_or_404(Entry, id=entry_id)
+    template = '%s/entry_detail.html' % entry.feed, 'entry_detail.html'
+    context = {'entry': entry}
+    return render_to_response(template, context,
+                              context_instance=RequestContext(request))

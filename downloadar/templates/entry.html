@@ -1,4 +1,4 @@
 <div class="entry">
-    <h4><strong>{{ entry.id }}|{{ entry.feed }}</strong> {{ entry.title }}</h4>
-
+    <h4 class="title">{{ entry.title }}</h4>
+    <div class="feed">Fetched from {{ entry.feed_name }} <span class="age">{{ entry.fetched|timesince }} ago</span></div>
 </div>
