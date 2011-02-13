@@ -17,7 +17,7 @@
             }
 
             function createFeedButton(feed) {
-                var button = $('<span/>', {class: 'button', text: feed.name});
+                var button = $('<span/>', {class: 'switch', text: feed.name});
                 feed.button = button;
                 button.mousedown(function() {
                     if (button.is('.loading')) {

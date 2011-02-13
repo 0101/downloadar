@@ -1,8 +1,11 @@
-import re
 from hashlib import md5
+import re
+from urllib2 import urlopen
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils import simplejson as json
+from django.utils._os import safe_join
 
 import feedparser
 
@@ -71,7 +74,7 @@ class BaseFeed(object):
             [(f, getattr(self, 'get_entry_' + f, default)(entry_data))
                 for f in fields]
         ))
-        entry.feed = self.__class__.get_id()
+        entry.feed_id = self.__class__.get_id()
         try:
             # TODO: special treatment of duplicate entries
             entry.full_clean()
@@ -81,6 +84,39 @@ class BaseFeed(object):
             #print "data:\n", entry_data
         else:
             entry.save()
+
+    def download_torrent(self, entry):
+        """
+        Download a .torrent file from the tracker and store it in
+        settings.TORRENT_DOWNLOAD_DIR
+
+        returns tuple (success, message)
+        """
+        if not entry.download_url:
+            return False
+
+        code, data, filename = self.fetch_torrent(entry)
+
+        if code == 200:
+            path = safe_join(settings.TORRENT_DOWNLOAD_DIR, filename)
+            f = open(path, 'w+b')
+            f.write(data)
+            f.close()
+            return True, u'%s downloaded' % filename
+        else:
+            return False, u'Error %s' % code
+
+    def fetch_torrent(self, entry):
+        """
+        Download the .torrent file from the tracker. This should return
+        a (HTTP status code, data, filename) tuple.
+        """
+        from time import sleep; sleep(1)
+        return 200, 'lol', entry.download_url.split('/')[-1]
+
+        #response = urlopen(entry.download_url)
+        filename = entry.download_url.split('/')[-1]
+        return response.code, response.read(), filename
 
     def get_entry_uid(self, entry_data):
         """

@@ -1,11 +1,32 @@
-<div class="entry_detail {{ entry.feed }}">
-<header>
-    {{ entry.title }}
-</header>
-
-<div class="content">
-<div class="summary">
-    {{ entry.content.summary|safe }}
+<div id="entry_detail" class="entry_detail {{ entry.feed_id }}">
+    <header>
+        <div class="header_inner">
+        <h2 class="title">{{ entry.title }}</h2>
+        {% include 'includes/download_section.html' %}
+        </div>
+        <div class="shade"></div>
+    </header>
+    <div class="entry_content">
+        <div class="entry_content_inner">
+            <div class="summary">
+                {% block summary %}
+                {{ entry.content.summary|safe }}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
 </div>
-</div>
-</div>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+    var viewport = $(window);
+    var header = $('#main_header');
+    var entryHeader = $('#entry_detail header');
+    $('#entry_detail .entry_content').autoResize({
+        getHeight: function() {
+            return viewport.height() - header.height() - entryHeader.height();
+        }
+    });
+})();
+//]]>
+</script>

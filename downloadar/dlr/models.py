@@ -22,7 +22,7 @@ class EntryManager(models.Manager):
 
 class Entry(models.Model):
     uid = models.CharField(max_length=200, unique=True)
-    feed = models.CharField(max_length=50)
+    feed_id = models.CharField(max_length=50)
     title = models.CharField(max_length=200)
     download_url = models.URLField(null=True, blank=True, verify_exists=False)
     content_json = models.TextField(null=True, blank=True)
@@ -44,16 +44,32 @@ class Entry(models.Model):
         return json.loads(self.content_json, encoding='utf-8')
 
     @property
-    def feed_name(self):
+    def feed(self):
         from dlr import feed
-        return feed.get(self.feed).name
+        return feed.get(self.feed_id)
+
+    @property
+    def feed_name(self):
+        return self.feed.name
 
     def clean(self):
         if not self.id:
             self.fetched = datetime.now()
 
+    def download(self, user):
+        assert not self.downloaded
+        success, message = self.feed.download_torrent(self)
+        if success:
+            self.downloaded = datetime.now()
+            self.downloaded_by = user
+            self.save()
+        return success, message
+
     def get_template(self):
-        return '%s/entry.html' % self.feed, 'entry.html'
+        return '%s/entry.html' % self.feed_id, 'entry.html'
+
+    def get_detail_template(self):
+        return '%s/entry_detail.html' % self.feed_id, 'entry_detail.html'
 
     def render_to_html(self):
         context = self.content
@@ -63,10 +79,11 @@ class Entry(models.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'feed': self.feed,
+            'feed': self.feed_id,
             'title': self.title,
             'html': self.render_to_html(),
-            'url': reverse('dlr:entry_detail', kwargs={'entry_id': self.id}),
+            'url': reverse('dlr:get_entry', kwargs={'entry_id': self.id}),
+            'detail_url': reverse('dlr:entry_detail', kwargs={'entry_id': self.id}),
         }
 
 

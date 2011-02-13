@@ -112,6 +112,7 @@
             }
 
             var create = {
+
                 entryElement: function(entry) {
                     var e = $('<li/>').html(entry.html).data('id', entry.id).hide();
 
@@ -122,7 +123,7 @@
                             }
                             e.addClass('loading');
 
-                            detailPane.trigger('display', [entry.url, function() {
+                            detailPane.trigger('display', [entry.detail_url, function() {
                                 e.removeClass('loading');
                                 e.addClass('active');
                                 if (activeEntry) {
@@ -130,10 +131,13 @@
                                 }
                                 activeEntry = entry;
                             }]);
+
+                            self.trigger('entry_selected', [entry]);
                         });
                     }
                     return e;
                 },
+
                 moreButton: function() {
                     var button = $('<span/>', {
                         class: 'more_button button disabled',
@@ -155,9 +159,8 @@
                         var callback = function() {
                             button.removeClass('loading');
                             if (scrollable) {
-                                var scrollTo = self.height() - scrollable.height() + 10;
-                                scrollable.animate({scrollTop: scrollTo}, 700);
                                 separator.show();
+                                scrollable.scrollTo(separator, {duration: 635});
                             }
                         }
                         fetchEntries(lastFeedList, handlers.pre.more,
@@ -165,6 +168,7 @@
                     });
                     return button;
                 },
+
                 separator: function() {
                     return $('<li/>', {class: 'separator'});
                 }
@@ -173,6 +177,27 @@
             function removeEntry(entry) {
                 delete entryMap[entry.id];
                 entry.element.remove();
+            }
+
+            function updateEntry(entry) {
+                $.get(entry.url, {}, function(response) {
+                    var oldEntry = entry;
+                    var newEntry = response.entry;
+
+                    newEntry.element = create.entryElement(newEntry);
+                    entryMap[newEntry.id] = newEntry;
+                    entries.splice(entries.indexOf(oldEntry), 1, newEntry);
+
+                    newEntry.element
+                        .insertBefore(oldEntry.element)
+                        .attr('class', oldEntry.element.attr('class'))
+                        .show();
+                    oldEntry.element.remove();
+
+                    if (oldEntry == activeEntry) {
+                        activeEntry = newEntry;
+                    }
+                }, 'json');
             }
 
             function fetchEntries(feedList, preHandler, postHandler, callback) {
@@ -195,8 +220,19 @@
                 }, 'json');
             }
 
+            function bindKeyboard() {
+                var LEFT = 37, UP = 38, RIGHT = 39, DOWN = 40;
+
+                $(window).keydown(function(e) {
+                    var key = e.keyCode;
+                    if (key == RIGHT || key == DOWN) { self.trigger('next') }
+                    if (key == LEFT || key == UP) { self.trigger('prev') }
+                });
+            }
+
             function init() {
                 moreButton = create.moreButton().insertAfter(list);
+                bindKeyboard();
             }
 
             self.bind('fetch_init', function(event, feedList, callback) {
@@ -212,6 +248,51 @@
             self.bind('fetch_unselect', function(event, feedList, callback) {
                 fetchEntries(feedList, handlers.pre.unselect,
                              handlers.post.merge, callback);
+            });
+
+            self.bind('next', function(event) {
+                if (!activeEntry) {
+                    if (entries.length) {
+                        entries[0].element.click();
+                    }
+                } else {
+                    var index = entries.indexOf(activeEntry) + 1;
+                    if (entries.length > index) {
+                        entries[index].element.click();
+                    } else {
+                        moreButton.click();
+                    }
+                }
+            });
+
+            self.bind('prev', function(event) {
+                if (!activeEntry) {
+                    if (entries.length) {
+                        entries[entries.length - 1].element.click();
+                    }
+                } else {
+                    var index = entries.indexOf(activeEntry) - 1;
+                    if (index >= 0) {
+                        entries[index].element.click();
+                    }
+                }
+            });
+
+            self.bind('select', function(event, id, callback) {
+                callback = callback || function() {};
+                if (id in entryMap) {
+                    entryMap[id].element.click();
+                    callback(true);
+                } else {
+                    callback(false);
+                }
+            });
+
+            self.bind('update', function(event, id) {
+                if (id in entryMap) {
+                    console.log('updating...');
+                    updateEntry(entryMap[id]);
+                }
             });
 
             init();

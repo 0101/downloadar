@@ -16,6 +16,7 @@
             <div id="detail"></div>
         </div>
     </div>
+    <div class="loading_animation"></div>
 </div>
 {% endblock %}
 
@@ -25,9 +26,13 @@
 
     var FEEDS = {{ feeds|safe }};
 
+    var status = $('#main_status').statusBar();
+
+    var detailPane = $('#detail').detailPane();
+
     var list = $('#list').entryList({
         urls: {get_entries: '{% url dlr:get_entries %}'},
-        detailPane: $('#detail').detailPane()
+        detailPane: detailPane
     });
 
     var filter = $('#filter').entryFilter({
@@ -35,6 +40,12 @@
         list: list,
         urls: {select: '{% url dlr:select %}',
                unselect: '{% url dlr:unselect %}'}
+    });
+
+    $.hashDispatch({
+        list: list,
+        detailPane: detailPane,
+        entryUrl: '{% url dlr:entry_detail entry_id=0 %}'
     });
 
 })();

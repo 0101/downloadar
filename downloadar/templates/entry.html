@@ -1,4 +1,7 @@
 <div class="entry">
     <h4 class="title">{{ entry.title }}</h4>
     <div class="feed">Fetched from {{ entry.feed_name }} <span class="age">{{ entry.fetched|timesince }} ago</span></div>
+    {% if entry.downloaded %}
+    <div class="downloaded">Downloaded {{ entry.downloaded|timesince }} ago by {{ entry.downloaded_by }}</div>
+    {% endif %}
 </div>

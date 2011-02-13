@@ -4,8 +4,8 @@ from dlr.models import Entry, UserProfile
 
 
 class EntryAdmin(admin.ModelAdmin):
-    list_display = 'title', 'feed', 'fetched',
-    list_filter = 'feed',
+    list_display = 'title', 'feed_id', 'fetched',
+    list_filter = 'feed_id',
     search_fields = 'title',
 
 

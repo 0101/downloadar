@@ -46,7 +46,7 @@ body {
 	background:#fafafa;color:#333;font-size:14px;
 }
 
-.button {
+.switch {
 	display:inline-block;padding:3px 15px;font-weight:bold;border:1px solid #aaa;
 	margin-right:15px;cursor:pointer;
 	border-radius:50px;
@@ -56,37 +56,66 @@ body {
 	-moz-box-shadow:0 0 4px #999;
 	-webkit-box-shadow:0 0 4px #999;
 }
-.button.active {
+.switch.active {
 	background:#333;color:#ddd;border:none;padding:4px 16px;
 	box-shadow:none;
 	-moz-box-shadow:none;
 	-webkit-box-shadow:none;
 }
-.button:hover {
+.switch:hover {
 	box-shadow:0 0 5px #333;
 	-moz-box-shadow:0 0 5px #333;
 	-webkit-box-shadow:0 0 5px #333;
 }
-.button.active:hover {
+.switch.active:hover {
 	color:#fff;
 	box-shadow:none;
 	-moz-box-shadow:none;
 	-webkit-box-shadow:none;
 }
-.button:active {
+.switch:active {
 	box-shadow:0 0 5px #333 inset;
 	-moz-box-shadow:0 0 5px #333 inset;
 	-webkit-box-shadow:0 0 5px #333 inset;
 }
-.button.loading {
+.switch.loading {
 	background:url('../img/loading_bar.gif') repeat-x;
 	box-shadow:0 0 5px #333 inset;
 	-moz-box-shadow:0 0 5px #333 inset;
 	-webkit-box-shadow:0 0 5px #333 inset;
 }
 
+.button {
+	display:inline-block;padding:3px 15px;font-weight:bold;border:1px solid #aaa;
+	cursor:pointer;background:url('../img/shade2.png') repeat-x center;
+	border-radius:50px;
+	-moz-border-radius:50px;
+	-webkit-border-radius:50px;
+	/*box-shadow:0 0 4px #999;*/
+	/*-moz-box-shadow:0 0 4px #999;*/
+	/*-webkit-box-shadow:0 0 4px #999;*/
+}
+.button:hover {
+	background-color: #fff;
+}
+.button:active {
+	box-shadow:0 0 5px #333 inset;
+	-moz-box-shadow:0 0 5px #333 inset;
+	-webkit-box-shadow:0 0 5px #333 inset;
+}
+.button.loading, .button.loading:hover {
+	background:url('../img/loading_bar.gif') repeat-x;
+	opacity:0.7;
+	box-shadow:none;
+	-moz-box-shadow:none;
+	-webkit-box-shadow:none;
+	cursor:default;
+}
+
+
 #list .more_button {
 	display:block;margin:0;border-width:1px 0 0;text-align:center;border-color:#bbb;padding:10px 0;
+	background:none;
 	border-radius:0px;
 	-moz-border-radius:0px;
 	-webkit-border-radius:0px;
@@ -114,8 +143,17 @@ body {
 
 #main_status {background:#333;color:#ddd;padding:5px;font-weight:bold;}
 #main_status .action {color:#fff;}
-#main_status .error {color:#EA6335;}
-#main_status .login_error {text-decoration:blink;}
+#main_status .login_error {text-decoration:blink;color:#D6611D;}
+
+#main_status .loading_animation {
+	width:0px; height:16px; display:inline-block; margin: 2px 5px -2px;
+	background:url('../img/loading-circle-small.gif') no-repeat center;
+}
+#main_status.loading .loading_animation {width:16px;}
+
+#main_status .info .content {color:#fff;}
+#main_status .error .content {color:#D6611D;text-decoration:blink;}
+#main_status .ok .content {color:#A7FFA3;}
 
 #main_controls {float:right;font-weight:bold;}
 #main_controls a {padding:5px 15px;display:inline-block;color:#ddd;}
@@ -124,10 +162,20 @@ body {
 #filter {padding:20px 0;border-bottom:1px solid #ccc;text-align:center;}
 
 #main_content .content_wrap {height:800px;position:relative;}
-#main_content .content_wrap .half_wrap {width:50%;height:100%;float:left;overflow:auto;}
+#main_content .content_wrap .half_wrap {width:50%;height:100%;float:left;overflow:auto;position:relative;}
 #main_content .content_wrap .detail .half_wrap_inner {
-	border-left:1px solid #ccc;min-height:100%;
+	border-left:1px solid #ccc;height:100%;overflow:auto;
 }
+#main_content .content_wrap .loading_animation {
+	position:absolute;width:64px; height:64px;top:-9000px;left:75%;margin:-32px;
+	background:#ffffff url('../img/loading-circle.gif') no-repeat center;
+	opacity:0.6;padding:32px;
+	border-radius:64px;
+	-moz-border-radius:64px;
+	-webkit-border-radius:64px;
+}
+#main_content .content_wrap.loading .loading_animation {top:50%}
+
 
 .login_form {width:180px;margin:100px auto;}
 .login_form .form_field {margin:10px 0;}
@@ -135,5 +183,11 @@ body {
 .login_form .form_field input {width:100%;padding:3px;font-family:consolas;font-size:15px;}
 .login_form .submit_row input {font-weight:bold;}
 
-#detail .entry_detail .content {padding:10px;}
-#detail .TorrentBytesX264Feed .summary {font-family:consolas, monospace;}
+#detail .entry_detail header {background:#eee;position:relative;}
+#detail .entry_detail header .header_inner {padding:10px;border-bottom:1px solid #ccc;overflow:hidden;}
+#detail .entry_detail header .title {font-size:28px;padding:7px 0;font-family: "Droid Sans";}
+#detail .entry_detail header .shade {position:absolute;height:10px;width:100%;bottom:-10px;left:0;background:url('../img/shade1.png') repeat-x;}
+
+#detail .entry_detail .entry_content {height:600px;overflow:auto;}
+#detail .entry_detail .entry_content_inner {padding:10px;}
+#detail .summary {font-family:"Droid Sans Mono", "Consolas", monospace; font-size:13px;}

@@ -1,16 +1,12 @@
-jQuery(function($){
-    var contentWrap = $('#main_content .content_wrap');
-    var header = $('#main_header');
+(function() {
+
     var viewport = $(window);
+    var header = $('#main_header');
 
-    function adjustContentWrapHeight(){
+    $('#main_content .content_wrap').autoResize({
+        getHeight: function() {
+            return viewport.height() - header.height();
+        }}
+    );
 
-        var height = viewport.height() - header.height();
-
-        contentWrap.height(height);
-    }
-
-    viewport.resize(adjustContentWrapHeight);
-
-    adjustContentWrapHeight();
-});
+})();

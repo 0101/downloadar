@@ -59,7 +59,7 @@ MEDIA_URL = ''
 
 # Absolute path to the directory that holds static files.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = join(PROJECT_DIR, 'static')
+STATIC_ROOT = ''
 
 # URL that handles the static files served from STATIC_ROOT.
 # Example: "http://media.lawrence.com/static/"
@@ -72,7 +72,7 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # A list of locations of additional static files
 STATICFILES_DIRS = (
-    STATIC_ROOT,
+    join(PROJECT_DIR, 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -153,6 +153,10 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_PROFILE_MODULE = 'dlr.UserProfile'
+
+# A directory into which the .torrent files will be downloaded. Should be an
+# absolute path
+TORRENT_DOWNLOAD_DIR = join(PROJECT_DIR, 'torrents')
 
 try:
     from settings_local import *

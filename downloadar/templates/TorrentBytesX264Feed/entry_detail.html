@@ -1,13 +1,5 @@
-<div class="entry_detail {{ entry.feed }}">
-<header>
-    {{ entry.title }}
-</header>
+{% extends 'entry_detail.html' %}
 
-<div class="content">
-<div class="summary">
-    <pre>
-    {{ entry.content.summary }}
-    </pre>
-</div>
-</div>
-</div>
+{% block summary %}
+    <pre>{{ block.super }}</pre>
+{% endblock %}

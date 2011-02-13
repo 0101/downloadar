@@ -11,6 +11,9 @@ class TorrentBytesX264Feed(feed.BaseFeed):
     def url(self):
         return settings.TORRENTBYTES_URL
 
+    def fetch_torrent(self, entry):
+        raise NotImplementedError('TODO: downloading from TorrentBytes')
+
     def filter_entry(self, entry_data):
         return entry_data.category == 'Movies/x264'
 

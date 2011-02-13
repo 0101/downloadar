@@ -4,7 +4,8 @@
 		<meta charset="utf-8" />
 		<title>{% block title %}{{ user.username }}@downloadar{% endblock %}</title>
 		<link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" media="screen,projection" />
-
+		<link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
 	</head>
 
 	<body>
@@ -12,7 +13,7 @@
 			{% if user.is_authenticated %}
 			<div id="main_controls"><a href="{% url logout %}">logout</a></div>
 			{% endif %}
-			<div id="main_status" class="status">{% block status %}{% if user.is_authenticated %}{{ user.username }}@{% endif %}downloadar{% endblock %}</div>
+			<div id="main_status" class="status"><span class="status_holder">{% block status %}{% if user.is_authenticated %}{{ user.username }}@{% endif %}downloadar{% endblock %}<span class="loading_animation"></span><span class="content"></span></span></div>
 			{% block header %}{% endblock %}
 		</header>
 
@@ -25,11 +26,17 @@
 		</script>
 
 		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.4.4.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.scrollTo-1.4.2-min.js"></script>
 
+		<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.autoresize.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/csrf.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/style.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/status.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/list.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/filter.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}js/detail_pane.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/hash_dispatch.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}js/download.js"></script>
 		{% block js %}{% endblock %}
 	</body>
 </html>
