@@ -30,6 +30,12 @@
                     }, 'html');
                 }
             });
+
+            self.bind('clear_cache' , function(event, url) {
+                console.log(cache, url);
+                delete cache[url];
+            });
+
         });
     }
     $.fn.detailPane.defaults = {}

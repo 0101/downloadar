@@ -7,8 +7,11 @@
         <script type="text/javascript">
         $('.dl_button[data-id="{{ entry.id }}"]').downloadButton({
             url: '{% url dlr:download %}',
+            id: {{ entry.id }},
+            entryDetailUrl: '{{ entry.detail_url }}',
             status: $('#main_status'),
-            list: $('#list')
+            list: $('#list'),
+            detailPane: $('#detail')
         });
         </script>
     {% endif %}

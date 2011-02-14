@@ -14,6 +14,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from jsonstore.models import JsonStore
 
+from dlr.utils import JSONField
+
 
 class EntryManager(models.Manager):
     def newest(self):
@@ -25,7 +27,7 @@ class Entry(models.Model):
     feed_id = models.CharField(max_length=50)
     title = models.CharField(max_length=200)
     download_url = models.URLField(null=True, blank=True, verify_exists=False)
-    content_json = models.TextField(null=True, blank=True)
+    content = JSONField(null=True, blank=True)
     fetched = models.DateTimeField(null=True, blank=True)
     downloaded = models.DateTimeField(null=True, blank=True)
     downloaded_by = models.ForeignKey(User, null=True, blank=True)
@@ -40,10 +42,6 @@ class Entry(models.Model):
         return self.title
 
     @property
-    def content(self):
-        return json.loads(self.content_json, encoding='utf-8')
-
-    @property
     def feed(self):
         from dlr import feed
         return feed.get(self.feed_id)
@@ -51,6 +49,10 @@ class Entry(models.Model):
     @property
     def feed_name(self):
         return self.feed.name
+
+    @property
+    def detail_url(self):
+        return reverse('dlr:entry_detail', kwargs={'entry_id': self.id})
 
     def clean(self):
         if not self.id:
@@ -74,6 +76,7 @@ class Entry(models.Model):
     def render_to_html(self):
         context = self.content
         context['entry'] = self
+        context['STATIC_URL'] = settings.STATIC_URL
         return render_to_string(self.get_template(), context)
 
     def serialize(self):
@@ -83,7 +86,7 @@ class Entry(models.Model):
             'title': self.title,
             'html': self.render_to_html(),
             'url': reverse('dlr:get_entry', kwargs={'entry_id': self.id}),
-            'detail_url': reverse('dlr:entry_detail', kwargs={'entry_id': self.id}),
+            'detail_url': self.detail_url,
         }
 
 

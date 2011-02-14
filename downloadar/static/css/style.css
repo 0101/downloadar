@@ -139,6 +139,14 @@ body {
 #list .active .entry,
 #list .active .entry * {cursor:default;}
 
+#list .entry .image {
+	width: 55px; height: 60px; float: left; margin:0 10px 0 0;
+	background: center no-repeat;
+	background-size: 60px auto;
+	-moz-background-size: 60px auto;
+	-webkit-background-size: 60px auto;
+}
+
 #list .separator {height:1px; border-top: 3px dashed #ddd;margin-top:3px;}
 
 #main_status {background:#333;color:#ddd;padding:5px;font-weight:bold;}
@@ -191,3 +199,4 @@ body {
 #detail .entry_detail .entry_content {height:600px;overflow:auto;}
 #detail .entry_detail .entry_content_inner {padding:10px;}
 #detail .summary {font-family:"Droid Sans Mono", "Consolas", monospace; font-size:13px;}
+#detail .entry_detail .entry_content .summary img {max-width: 100%;}

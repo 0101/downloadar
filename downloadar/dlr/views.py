@@ -27,7 +27,7 @@ def index(request, template='index.html'):
 class Entries(JSONResponseMixin, View):
     def get(self, request):
         feeds = request.GET.getlist('feeds[]')
-        limit = max(int(request.GET.get('limit', 0)), 15)
+        limit = max(int(request.GET.get('limit', 0)), 10)
         gt = request.GET.get('gt')
         lt = request.GET.get('lt')
         entries = Entry.objects.newest().filter(feed_id__in=feeds)

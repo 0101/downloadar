@@ -158,6 +158,9 @@ AUTH_PROFILE_MODULE = 'dlr.UserProfile'
 # absolute path
 TORRENT_DOWNLOAD_DIR = join(PROJECT_DIR, 'torrents')
 
+IMAGE_DIR_NAME = 'img'
+IMAGE_DIR = join(PROJECT_DIR, 'static', IMAGE_DIR_NAME)
+
 try:
     from settings_local import *
 except ImportError:

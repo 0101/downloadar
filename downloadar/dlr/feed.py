@@ -75,6 +75,7 @@ class BaseFeed(object):
                 for f in fields]
         ))
         entry.feed_id = self.__class__.get_id()
+
         try:
             # TODO: special treatment of duplicate entries
             entry.full_clean()
@@ -83,6 +84,8 @@ class BaseFeed(object):
             print "Entry didn't validate", self, e
             #print "data:\n", entry_data
         else:
+            self.entry_pre_save(entry, entry_data)
+            # TODO: validate again?
             entry.save()
 
     def download_torrent(self, entry):
@@ -139,11 +142,14 @@ class BaseFeed(object):
         url = getattr(entry_data, 'link', None)
         return url.replace(' ', '%20') if url else None
 
-    def get_entry_content_json(self, entry_data):
+    def get_entry_content(self, entry_data):
+        return '{}'
+
+    def entry_pre_save(self, entry, entry_data):
         """
-        Return a JSON-serialized dictionary that will be used as a context
-        for rendering this entry's template.
+        Hook to do something with the entry object before it's saved.
         """
         summary = getattr(entry_data, 'summary', None)
         if summary is not None:
-            return json.dumps({'summary': summary}, ensure_ascii=False)
+            entry.content['summary'] = summary
+

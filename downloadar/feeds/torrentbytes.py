@@ -1,9 +1,10 @@
 from django.conf import settings
 
 from dlr import feed
+from dlr.imdb import IMDBFeedMixin
 
 
-class TorrentBytesX264Feed(feed.BaseFeed):
+class TorrentBytesX264Feed(IMDBFeedMixin, feed.BaseFeed):
 
     name = "TorrentBytes Movies/x264"
 
