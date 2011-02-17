@@ -79,15 +79,18 @@ class BaseFeed(object):
         entry.feed_id = self.__class__.get_id()
 
         try:
-            # TODO: special treatment of duplicate entries
             entry.full_clean()
         except ValidationError, e:
             # TODO: proper logging
-            print "Entry didn't validate", self.name, e
+            if not 'uid' in e.message_dict:
+                print "%s: entry %s didn't validate: %s" % (
+                    self.name, getattr(entry, 'title', ''), e
+                )
         else:
             self.entry_pre_save(entry, entry_data)
             # TODO: validate again?
             entry.save()
+            print '%s: added [%s] %s' % (self.name, entry.id, entry.title)
 
     def download_torrent(self, entry):
         """
@@ -115,10 +118,9 @@ class BaseFeed(object):
         Download the .torrent file from the tracker. This should return
         a (HTTP status code, data, filename) tuple.
         """
-        from time import sleep; sleep(1)
-        return 200, 'lol', entry.download_url.split('/')[-1]
-
-        #response = urlopen(entry.download_url)
+        #from time import sleep; sleep(1)
+        #return 200, 'lol', entry.download_url.split('/')[-1]
+        response = urlopen(entry.download_url)
         filename = entry.download_url.split('/')[-1]
         return response.code, response.read(), filename
 
