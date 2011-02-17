@@ -9,6 +9,7 @@
             var contentWrap = self.closest('.content_wrap');
 
             function display(html) {
+                self.closest('.empty').removeClass('empty');
                 self.html(html);
             }
 

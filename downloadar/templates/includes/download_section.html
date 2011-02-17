@@ -1,7 +1,7 @@
 {% if entry.download_url %}
-    <div class="download_section">
+    <div class="download_section {% if entry.downloaded %}downloaded{% endif %}">
     {% if entry.downloaded %}
-        <span class="info">Downloaded {{ entry.downloaded|timesince }} ago by {{ entry.downloaded_by.username }}</span>
+        <span class="info">Downloaded {{ entry.downloaded|timesince }} ago by <strong>{{ entry.downloaded_by.username }}</strong></span>
     {% else %}
         <span data-id="{{ entry.id }}" class="dl_button button">Download</span>
         <script type="text/javascript">

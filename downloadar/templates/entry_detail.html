@@ -1,7 +1,11 @@
 <div id="entry_detail" class="entry_detail {{ entry.feed_id }}">
     <header>
         <div class="header_inner">
-        <h2 class="title">{{ entry.title }}</h2>
+            {% block header %}
+            <h2 class="title">{% block title %}{{ entry.title }}{% endblock %}</h2>
+            {% endblock %}
+        </div>
+        <div class="download_section_containter">
         {% include 'includes/download_section.html' %}
         </div>
         <div class="shade"></div>

@@ -1,8 +1,13 @@
-<div class="entry clearfix">
-    <div class="image" style="background-image: url({{ STATIC_URL }}{{ entry.content.image }})"></div>
-    <h4 class="title">{{ entry.title }}</h4>
-    <div class="feed">Fetched from {{ entry.feed_name }} <span class="age">{{ entry.fetched|timesince }} ago</span></div>
-    {% if entry.downloaded %}
-    <div class="downloaded">Downloaded {{ entry.downloaded|timesince }} ago by {{ entry.downloaded_by }}</div>
-    {% endif %}
+<div class="entry {% if entry.downloaded %}downloaded{% endif %}">
+    <div class="inner clearfix">
+        {% if entry.content.image %}<div class="image" style="background-image: url({{ STATIC_URL }}{{ entry.content.image }})"></div>{% endif %}
+        <div class="entry_content">
+            <h4 class="title">{% block title %}{{ entry.title }}{% endblock %}</h4>
+            {% block content %}{% endblock %}
+            {% if not entry.downloaded %}<div class="feed_info">Fetched from <strong>{{ entry.feed_name }}</strong> <span class="age">{{ entry.fetched|timesince }} ago</span></div>{% endif %}
+            {% if entry.downloaded %}
+            <div class="downloaded_info">Downloaded {{ entry.downloaded|timesince }} ago by <strong>{{ entry.downloaded_by }}</strong></div>
+            {% endif %}
+        </div>
+    </div>
 </div>

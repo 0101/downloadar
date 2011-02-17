@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -40,6 +40,7 @@ class Entries(JSONResponseMixin, View):
             'entries': [e.serialize() for e in entries[:limit]],
             'more': entries.count() > limit,
         })
+
 
 class EntryListItem(JSONResponseMixin, View):
     def get(self, request, entry_id):
@@ -86,6 +87,9 @@ def entry_detail(request, entry_id):
 
 class Download(JSONResponseMixin, View):
     def post(self, request):
+        if not request.user.get_profile().can_download:
+            from time import sleep; sleep(.5)
+            return HttpResponseForbidden('You are not allowed to download.')
         entry_id = request.POST.get('entry_id')
         if entry_id:
             entry = get_object_or_404(Entry, id=entry_id)

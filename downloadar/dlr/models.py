@@ -68,10 +68,10 @@ class Entry(models.Model):
         return success, message
 
     def get_template(self):
-        return '%s/entry.html' % self.feed_id, 'entry.html'
+        return self.feed.entry_template, 'entry.html'
 
     def get_detail_template(self):
-        return '%s/entry_detail.html' % self.feed_id, 'entry_detail.html'
+        return self.feed.entry_detail_template, 'entry_detail.html'
 
     def render_to_html(self):
         context = self.content
@@ -92,9 +92,14 @@ class Entry(models.Model):
 
 class UserProfile(JsonStore):
     user = models.ForeignKey(User, unique=True)
+    can_download = models.BooleanField(default=True)
 
     def __unicode__(self):
         return u"%s's profile" % self.user.username
+
+    def save(self, *args, **kwargs):
+        self.selected_feeds = self.selected_feeds or {}
+        super(UserProfile, self).save(*args, **kwargs)
 
 
 def create_profile(sender, created, instance=None, **kwargs):

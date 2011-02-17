@@ -37,6 +37,8 @@ def fetch_all(print_progress=False):
 class BaseFeed(object):
 
     entry_model = Entry
+    entry_template = 'entry.html'
+    entry_detail_template = 'entry_detail.html'
 
     @property
     def name(self):
@@ -81,8 +83,7 @@ class BaseFeed(object):
             entry.full_clean()
         except ValidationError, e:
             # TODO: proper logging
-            print "Entry didn't validate", self, e
-            #print "data:\n", entry_data
+            print "Entry didn't validate", self.name, e
         else:
             self.entry_pre_save(entry, entry_data)
             # TODO: validate again?
@@ -96,7 +97,7 @@ class BaseFeed(object):
         returns tuple (success, message)
         """
         if not entry.download_url:
-            return False
+            return False, 'This entry has no download URL'
 
         code, data, filename = self.fetch_torrent(entry)
 
@@ -152,4 +153,3 @@ class BaseFeed(object):
         summary = getattr(entry_data, 'summary', None)
         if summary is not None:
             entry.content['summary'] = summary
-

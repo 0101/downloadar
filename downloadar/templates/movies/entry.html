@@ -1,0 +1,16 @@
+{% extends 'entry.html' %}
+
+{% with entry.content.imdb as imdb %}
+
+    {% block title %}
+        {{ entry.title }}
+        {% if imdb.Year %} <span class="year">{{ imdb.Year }}</span>{% endif %}
+        {% if entry.content.quality %}<span class="quality">{{ entry.content.quality }}</span>{% endif %}
+    {% endblock %}
+
+    {% block content %}
+
+        {% if imdb.Rating %}<span class="imdb_rating">IMDB: <strong>{{ imdb.Rating }}</strong>/10</span>{% endif %}
+    {% endblock %}
+
+{% endwith %}

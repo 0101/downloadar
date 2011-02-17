@@ -41,6 +41,7 @@
                     feed.button.addClass('active');
                 }]);
                 $.post(opts.urls.select, {'feed': feed.id});
+                self.trigger('not_empty');
             }
 
             function deactivateFeed(feed) {
@@ -48,6 +49,9 @@
                 list.trigger('fetch_unselect', [getActiveFeedList()]);
                 feed.button.removeClass('active');
                 $.post(opts.urls.unselect, {'feed': feed.id});
+                if (getActiveFeedList().length == 0) {
+                    self.trigger('empty');
+                }
             }
 
             function filter(entry) {
@@ -69,7 +73,17 @@
                     }
                 });
 
-                list.trigger('fetch_init', [getActiveFeedList()]);
+                opts.status.trigger('start_loading_animation');
+                opts.status.trigger('info', ['loading entries']);
+                list.trigger('fetch_init', [getActiveFeedList(), function() {
+                    opts.status.trigger('clear');
+                }]);
+
+                if (getActiveFeedList().length == 0) {
+                    self.trigger('empty');
+                } else {
+                    self.trigger('not_empty');
+                }
             }
 
             init();
@@ -77,6 +91,7 @@
     }
     $.fn.entryFilter.defaults = {
         list: null,
+        status: $(),
         feeds: []
     }
 })(jQuery);

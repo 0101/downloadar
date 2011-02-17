@@ -224,9 +224,16 @@
                 var LEFT = 37, UP = 38, RIGHT = 39, DOWN = 40;
 
                 $(window).keydown(function(e) {
+                    // TODO: scroll if entry out of viewport
                     var key = e.keyCode;
-                    if (key == RIGHT || key == DOWN) { self.trigger('next') }
-                    if (key == LEFT || key == UP) { self.trigger('prev') }
+                    if (key == RIGHT || key == DOWN) {
+                        self.trigger('next');
+                        return false;
+                    }
+                    if (key == LEFT || key == UP) {
+                        self.trigger('prev');
+                        return false;
+                    }
                 });
             }
 
@@ -290,7 +297,6 @@
 
             self.bind('update', function(event, id) {
                 if (id in entryMap) {
-                    console.log('updating...');
                     updateEntry(entryMap[id]);
                 }
             });

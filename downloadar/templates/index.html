@@ -11,7 +11,7 @@
             <div id="list"></div>
         </div>
     </div>
-    <div class="half_wrap detail">
+    <div class="half_wrap detail empty">
         <div class="half_wrap_inner">
             <div id="detail"></div>
         </div>
@@ -38,6 +38,7 @@
     var filter = $('#filter').entryFilter({
         feeds: FEEDS,
         list: list,
+        status: status,
         urls: {select: '{% url dlr:select %}',
                unselect: '{% url dlr:unselect %}'}
     });
