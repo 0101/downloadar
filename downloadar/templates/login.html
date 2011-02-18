@@ -22,8 +22,11 @@
             <input type="submit" value="Log in" />
         </div>
     </form>
-    <script type="text/javascript">
-    $('#login_form input[type="text"]:first').focus();
-    </script>
 </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$('#login_form input[type="text"]:first').focus();
+</script>
 {% endblock %}
