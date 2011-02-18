@@ -131,7 +131,7 @@ body {
 #list .entry .title {font-weight:bold;}
 #list .entry .title .year {color:#999;}
 #list .entry .title .quality {
-	font-weight:bold;background-color:#555;padding:1px 5px;color:#eee;font-size:12px;
+	font-weight:bold;background-color:#555;padding:1px 5px;color:#fafafa;font-size:12px;
 	border-radius:20px;
 	-moz-border-radius:20px;
 	-webkit-border-radius:20px;
