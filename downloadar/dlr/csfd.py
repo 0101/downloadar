@@ -1,5 +1,5 @@
 import re
-from urllib import quote_plus
+from django.utils.http import urlquote_plus
 import urllib2
 
 from BeautifulSoup import BeautifulSoup
@@ -42,7 +42,7 @@ def _find_film(title, imdb_id):
     Tries to find film profile on CSFD. If successful, returns tuple
     (csfd profile url, BeautifulSoup of the page), otherwise None
     """
-    search_url = SEARCH_URL % quote_plus(title)
+    search_url = SEARCH_URL % urlquote_plus(title)
     search_results = BeautifulSoup(urllib2.urlopen(search_url))
     films_found = search_results.find(attrs={'id': 'search-films'})
     if not films_found:
@@ -74,7 +74,7 @@ def _find_film(title, imdb_id):
 
 def _fetch_film(url):
     try:
-        return BeautifulSoup(urllib2.urlopen(url))
+        return url, BeautifulSoup(urllib2.urlopen(url))
     except Exception, e:
         # TODO logging
         print 'csfd _fetch_film error: ', e
