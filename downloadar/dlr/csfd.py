@@ -44,6 +44,7 @@ def _find_film(title, imdb_id):
     """
     search_url = SEARCH_URL % urlquote_plus(title)
     search_results = BeautifulSoup(urllib2.urlopen(search_url))
+    # TODO: we could be redirected directly to the film profile, e.g. "Megamind"
     films_found = search_results.find(attrs={'id': 'search-films'})
     if not films_found:
         return
