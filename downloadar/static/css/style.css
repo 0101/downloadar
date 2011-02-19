@@ -111,6 +111,11 @@ body {
 	cursor:default;
 }
 
+.csfd .rating .color {display:inline-block;width:10px;height:10px;}
+.csfd .rating .color.black {background-color:#494949;}
+.csfd .rating .color.blue {background-color:#7585ac;}
+.csfd .rating .color.red {background-color:#c1001f;}
+
 #list .more_button {
 	display:block;margin:0;border-width:1px 0 0;text-align:center;border-color:#bbb;padding:10px 0;
 	background:none;
@@ -125,17 +130,21 @@ body {
 #list .more_button.loading {background:url('../img/loading_bar.gif') repeat; opacity:0.3;}
 #list .more_button.disabled {display:none;}
 
-#list .entry {position:relative;}
+#list .entry {position:relative;line-height:1.45;}
 #list .entry .inner {padding:10px;min-height:35px;}
 /*#list .entry.downloaded {background-color:#F4F4F4;}*/
 #list .entry .title {font-weight:bold;}
 #list .entry .title .year {color:#999;}
 #list .entry .title .quality {
-	font-weight:bold;background-color:#555;padding:1px 5px;color:#fafafa;font-size:12px;
+	font-weight:bold;background-color:#777;padding:1px 5px;color:#fafafa;font-size:12px;
 	border-radius:20px;
 	-moz-border-radius:20px;
 	-webkit-border-radius:20px;
 }
+#list .entry .rating .votes {display:none;}
+#list .entry .imdb {float:left;padding-right:5px;}
+#list .entry .search_link {padding-right:16px; background:url('../img/search_small.png') no-repeat right 4px;}
+#list .entry .search_link:hover {background-position:right -45px;}
 #list .entry:hover {cursor:pointer;background:#eee;}
 #list .entry:hover * {cursor:pointer;}
 #list .loading .entry {background:#aaa;}
@@ -145,6 +154,7 @@ body {
 #list .loading .entry *,
 #list .active .entry,
 #list .active .entry * {cursor:default;}
+#list .active .entry a {color:#eee;cursor:pointer;}
 
 #list .entry .image {
 	width: 55px; height: 60px; float: left; margin:0 10px 0 0;
@@ -156,7 +166,6 @@ body {
 #list .entry .entry_content {padding-left:65px;}
 /*#list .entry .entry_content .quality {font-weight:bold;background-color:#666;padding:1px 3px; -moz-border-radius:5px;color:#ddd;font-size:11px;}*/
 
-
 #list .entry.downloaded {color: #888;}
 #list .entry.downloaded .quality {background-color:#888;}
 #list .entry.downloaded .image {opacity:0.6;}
@@ -166,7 +175,6 @@ body {
 #list .active .entry.downloaded {color: #ddd;}
 #list .active .entry.downloaded .quality {background-color: #555;}
 #list .active .entry.downloaded .image {opacity:1;}
-
 
 /*#list .entry .feed_info {color:#777;}*/
 /*#list .active .entry .feed_info {color:#aaa;}*/
@@ -247,9 +255,13 @@ body {
 #detail .entry_detail header .movie_info .row span {padding:3px 10px 3px 0px;margin-right:5px;display:inline-block;}
 #detail .entry_detail header .movie_info .row.multi span {border-right:1px solid #ccc;}
 #detail .entry_detail header .movie_info .row span small {color:#777;}
-#detail .entry_detail header .imdb {padding:0 0 10px;font-size:18px;}
-#detail .entry_detail header .imdb .votes {color:#777;font-size:14px;}
+#detail .entry_detail header .rating_sites {padding:0 0 10px;font-size:18px;}
+#detail .entry_detail header .rating_sites .votes {color:#777;font-size:14px;}
+#detail .entry_detail header .rating_sites .imdb {float:left; padding-right:10px;}
+#detail .entry_detail header .csfd .color {width:13px; height:13px;}
 
+#detail .entry_detail header .search_link {padding-right:23px; background:url('../img/search.png') no-repeat right 4px;}
+#detail .entry_detail header .search_link:hover {background-position:right -72px;}
 
 #detail .entry_detail .entry_content {height:600px;overflow:auto;}
 #detail .entry_detail .entry_content_inner {padding:10px;}

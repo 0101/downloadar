@@ -10,7 +10,9 @@
 
     {% block content %}
 
-        {% if imdb.Rating %}<span class="imdb_rating">IMDB: <strong>{{ imdb.Rating }}</strong>/10</span>{% endif %}
+        {% include 'movies/imdb.html' %}
+        {% include 'movies/csfd.html' %}
+
     {% endblock %}
 
 {% endwith %}

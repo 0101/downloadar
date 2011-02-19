@@ -5,13 +5,14 @@ import urllib2
 from django.conf import settings
 
 from dlr import feed
+from dlr.csfd import CSFDFeedMixin
 from dlr.imdb import IMDBFeedMixin
 
 
 TITLE_RE = re.compile(r'^(?P<title>.*)\.(?P<year>\d{4})\..*(?P<quality>720p|1080p)')
 
 
-class TorrentBytesX264Feed(IMDBFeedMixin, feed.BaseFeed):
+class TorrentBytesX264Feed(CSFDFeedMixin, IMDBFeedMixin, feed.BaseFeed):
 
     name = "TB Movies/x264"
 

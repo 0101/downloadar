@@ -1,0 +1,16 @@
+{% load humanize %}
+{% with entry.content.imdb as imdb %}
+<div class="imdb">
+    {% if imdb.link %}
+        <a href="{{ imdb.link }}" target="_blank">IMDB</a>:
+        {% if imdb.Rating %}
+        <span class="rating">
+            <strong>{{ imdb.Rating }}</strong>/10
+            {% if imdb.Votes %}<span class="votes">({{ imdb.Votes|intcomma }} votes)</span>{% endif %}
+        </span>
+        {% endif %}
+    {% else %}
+        <a class="search_link" href="http://www.imdb.com/find?s=tt&q={{ entry.title }}" target="_blank">IMDB</a>
+    {% endif %}
+</div>
+{% endwith %}

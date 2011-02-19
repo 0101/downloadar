@@ -1,0 +1,17 @@
+{% load humanize %}
+{% with entry.content.csfd as csfd %}
+<div class="csfd">
+    {% if csfd.link %}
+        <a href="{{ csfd.link }}" target="_blank">CSFD</a>:
+        {% if csfd.rating %}
+        <span class="rating">
+            <span class="color {% if csfd.rating <= 30 %}black{% else %}{% if csfd.rating >= 70 %}red{% else %}blue{% endif %}{% endif %}"></span>
+            <strong>{{ csfd.rating }}</strong>%
+            {% if csfd.votes %}<span class="votes">({{ csfd.votes|intcomma }} votes)</span>{% endif %}
+        </span>
+        {% endif %}
+    {% else %}
+        <a class="search_link" href="http://www.csfd.cz/hledat/?q={{ entry.title }}" target="_blank">CSFD</a>
+    {% endif %}
+</div>
+{% endwith %}

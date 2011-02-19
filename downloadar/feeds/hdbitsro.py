@@ -7,6 +7,7 @@ from django.conf import settings
 from BeautifulSoup import BeautifulSoup
 
 from dlr import feed
+from dlr.csfd import CSFDFeedMixin
 from dlr.imdb import IMDBFeedMixin
 from dlr.utils import download_image
 
@@ -15,7 +16,7 @@ IMAGE_RE = re.compile(r'src=')
 TITLE_RE = re.compile(r'^(?P<title>.*) (?P<year>\d{4}) .*(?P<quality>720p|1080p)')
 
 
-class HdbitsFeed(IMDBFeedMixin, feed.BaseFeed):
+class HdbitsFeed(CSFDFeedMixin, IMDBFeedMixin, feed.BaseFeed):
 
     name = "HD-bits.ro"
 

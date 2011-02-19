@@ -1,7 +1,5 @@
 {% extends 'entry_detail.html' %}
 
-{% load humanize %}
-
 {% block title %}
 {{ block.super }}
 {% if entry.content.imdb.Year %}<span class="year">{{ entry.content.imdb.Year }}</span>{% endif %}
@@ -19,36 +17,28 @@
         <div class="info_container">
         {% endif %}
 
-            {{ block.super }}
+        {{ block.super }}
 
-            {% if imdb %}
-            <div class="imdb">
-                <a href="{{ imdb.link }}" target="_blank">IMDB</a>:
-                <span class="rating">
-                    <strong>{{ imdb.Rating }}</strong>/10
-                    <span class="votes">({{ imdb.Votes|intcomma }} votes)</span>
-                </span>
+        <div class="rating_sites">
+        {% include 'movies/imdb.html' %}
+        {% include 'movies/csfd.html' %}
+        </div>
+
+        {% if imdb %}
+        <div class="movie_info">
+            <div class="row multi">
+                <span><small>Director:</small> {{ imdb.Director }}</span>
+                <span>{{ imdb.Runtime }}</span>
+                <span>{{ imdb.Genre }}</span>
+                <span>{{ imdb.Rated }}</span>
             </div>
-            {% endif %}
-
-            {% if imdb %}
-            <div class="movie_info">
-                <div class="row multi">
-                    <span><small>Director:</small> {{ imdb.Director }}</span>
-
-                    <span>{{ imdb.Runtime }}</span>
-
-                    <span>{{ imdb.Genre }}</span>
-
-                    <span>{{ imdb.Rated }}</span>
-                </div>
-                <div class="row">
-                    <span><small>Cast:</small> {{ imdb.Actors }}</span>
-                </div>
-                <div class="row plot"><span>{{ imdb.Plot }}</span></div>
-                {% if entry.content.release_name %}<div class="row release"><span><small>Release name:</small> {{ entry.content.release_name }}</span></div>{% endif %}
+            <div class="row">
+                <span><small>Cast:</small> {{ imdb.Actors }}</span>
             </div>
-            {% endif %}
+            <div class="row plot"><span>{{ imdb.Plot }}</span></div>
+            {% if entry.content.release_name %}<div class="row release"><span><small>Release name:</small> {{ entry.content.release_name }}</span></div>{% endif %}
+        </div>
+        {% endif %}
 
         {% if imdb.Poster and entry.content.image %}
         </div>
