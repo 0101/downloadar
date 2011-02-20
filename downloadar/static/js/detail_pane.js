@@ -33,8 +33,11 @@
             });
 
             self.bind('clear_cache' , function(event, url) {
-                console.log(cache, url);
-                delete cache[url];
+                if (url) {
+                    delete cache[url];
+                } else {
+                    cache = {};
+                }
             });
 
         });

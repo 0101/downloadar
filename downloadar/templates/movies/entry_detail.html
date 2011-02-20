@@ -47,3 +47,30 @@
 
     {% endwith %}
 {% endblock %}
+
+{% block releases %}
+
+{% if entry.other_releases.available %}
+<div class="releases">
+    <h4>This movie is also available as:</h4>
+    {% with entry.other_releases.available as release_list %}
+        {% include 'movies/release_list.html' %}
+    {% endwith %}
+</div>
+{% endif %}
+
+{% if entry.other_releases.downloaded %}
+<div class="releases already_downloaded">
+    <h4>
+    {% if entry.other_releases.downloaded|length == 1 %}
+        This movie was already downloaded in this release:
+    {% else %}
+        This movie was already downloaded in the following releases:
+    {% endif %}
+    </h4>
+    {% with entry.other_releases.downloaded as release_list %}
+        {% include 'movies/release_list.html' %}
+    {% endwith %}
+</div>
+{% endif %}
+{% endblock %}

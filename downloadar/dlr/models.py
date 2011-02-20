@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from jsonstore.models import JsonStore
 
-from dlr.utils import JSONField
+from dlr.utils import JSONField, cached
 
 
 class EntryManager(models.Manager):
@@ -31,6 +31,7 @@ class Entry(models.Model):
     fetched = models.DateTimeField(null=True, blank=True)
     downloaded = models.DateTimeField(null=True, blank=True)
     downloaded_by = models.ForeignKey(User, null=True, blank=True)
+    imdb_id = models.CharField(max_length=16, null=True, blank=True, db_index=True)
 
     objects = EntryManager()
 
@@ -53,6 +54,18 @@ class Entry(models.Model):
     @property
     def detail_url(self):
         return reverse('dlr:entry_detail', kwargs={'entry_id': self.id})
+
+    @property
+    @cached
+    def other_releases(self):
+        if self.imdb_id:
+            entries = (Entry.objects.filter(imdb_id=self.imdb_id)
+                       .exclude(id=self.id))
+            if entries:
+                return {
+                    'available': filter(lambda e: not e.downloaded, entries),
+                    'downloaded': filter(lambda e: e.downloaded, entries),
+                }
 
     def clean(self):
         if not self.id:

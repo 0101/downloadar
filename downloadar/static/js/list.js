@@ -295,6 +295,13 @@
                 }
             });
 
+            self.bind('unselect', function(event) {
+                if (activeEntry) {
+                    activeEntry.element.removeClass('active');
+                    activeEntry = null;
+                }
+            });
+
             self.bind('update', function(event, id) {
                 if (id in entryMap) {
                     updateEntry(entryMap[id]);

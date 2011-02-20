@@ -73,3 +73,20 @@ def download_image(url, save_as):
         f.close()
         image_url = '%s/%s' % (settings.IMAGE_DIR_NAME, save_as.replace('\\', '/'))
         return image_url
+
+
+def cached(func):
+    """Decorator that caches function's return value on given object"""
+    def wrapped(object, *args):
+        cache_attr = '_cached_%s' % func.__name__
+        if not hasattr(object, cache_attr):
+            setattr(object, cache_attr, {})
+        cache = getattr(object, cache_attr)
+        try:
+            return cache[args]
+        except KeyError:
+            cache[args] = value = func(object, *args)
+            return value
+        except TypeError:
+            return func(*args)
+    return wrapped

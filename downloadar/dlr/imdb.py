@@ -67,6 +67,8 @@ class IMDBFeedMixin(object):
         except KeyError:
             return
 
+        entry.imdb_id = id
+
         old_data = entry.content['imdb']
         imdb_data = data or IMDB.get(id=id)
         if not imdb_data:

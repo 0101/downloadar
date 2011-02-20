@@ -5,6 +5,7 @@
             <h2 class="title">{% block title %}{{ entry.title }}{% endblock %}</h2>
             {% endblock %}
         </div>
+        {% block releases %}{% endblock %}
         <div class="download_section_containter">
         {% include 'includes/download_section.html' %}
         </div>
@@ -30,6 +31,12 @@
         getHeight: function() {
             return viewport.height() - header.height() - entryHeader.height();
         }
+    });
+
+    $('#entry_detail .releases a').click(function() {
+        window.location.hash = $(this).attr('href');
+        $('body').trigger('hash_changed');
+        return false;
     });
 })();
 //]]>

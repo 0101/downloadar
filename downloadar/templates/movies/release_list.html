@@ -1,0 +1,12 @@
+<ul>
+    {% for entry in release_list %}
+    <li>
+        <a href="#{{ entry.id }}">
+
+            {% if entry.content.release_name %}{{ entry.content.release_name }}{% else %}{{ entry.title }}{% endif %}
+            {% if entry.content.quality %}<span class="quality">{{ entry.content.quality }}</span>{% endif %}
+        </a>
+        <span class="age">Added {{ entry.fetched|timesince }} ago</span>
+    </li>
+    {% endfor %}
+</ul>

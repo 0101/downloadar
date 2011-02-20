@@ -9,7 +9,7 @@ $.hashDispatch = function(opts) {
         return opts.entryUrl.replace('0', id);
     }
 
-    function checkForChange() {
+    function checkHash() {
         var hash = window.location.hash;
         var match = window.location.hash.match(/^#([0-9]+)$/);
         if (match) {
@@ -18,15 +18,18 @@ $.hashDispatch = function(opts) {
                 opts.list.trigger('select', [id, function(selected) {
                     if (!selected) {
                         opts.detailPane.trigger('display', [getUrl(id)]);
+                        opts.list.trigger('unselect');
                         lastSelected = id;
-                    } 
+                    }
                 }]);
             }
         }
     }
 
-    checkForChange();
+    checkHash();
 
-    window.setInterval(checkForChange, 400);
+    window.setInterval(checkHash, 400);
+
+    $('body').bind('hash_changed', checkHash);
 
 }

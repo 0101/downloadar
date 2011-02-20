@@ -27,7 +27,7 @@ input, select {
 
 a {text-decoration: underline; outline:none; cursor:pointer; color:#333;}
 a * {cursor:pointer;}
-a:hover, a:active, a:focus {color:#999;}
+a:hover, a:active, a:focus {opacity:0.6;}
 a.alt, .alt a {text-decoration: underline;}
 .alt a:hover, .alt a:active, .alt a:focus, a.alt:hover, a.alt:active, a.alt:focus {text-decoration: none;}
 a img {border: none;}
@@ -135,7 +135,8 @@ body {
 /*#list .entry.downloaded {background-color:#F4F4F4;}*/
 #list .entry .title {font-weight:bold;}
 #list .entry .title .year {color:#999;}
-#list .entry .title .quality {
+#list .entry .title .quality,
+#detail .releases .quality {
 	font-weight:bold;background-color:#777;padding:1px 5px;color:#fafafa;font-size:12px;
 	border-radius:20px;
 	-moz-border-radius:20px;
@@ -267,3 +268,9 @@ body {
 #detail .entry_detail .entry_content_inner {padding:10px;}
 #detail .summary {font-family:"Droid Sans Mono", "Consolas", monospace; font-size:13px;}
 #detail .entry_detail .entry_content .summary img {max-width: 100%;}
+
+#detail .entry_detail .releases { border-top:1px solid #ccc; padding:10px;}
+#detail .entry_detail .releases h4 {font-size:18px;margin:0 0 5px;}
+#detail .entry_detail .releases ul {line-height:1.6;}
+#detail .entry_detail .releases a {text-decoration:none; font-weight:bold;}
+#detail .entry_detail .releases.already_downloaded {background-color:#EDEBB4;}

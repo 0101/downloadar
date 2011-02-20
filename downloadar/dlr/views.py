@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson as json
-from django.views.generic.base import View
+from django.views.generic.base import View, TemplateResponseMixin
 from django.views.generic.simple import direct_to_template
 
 from dlr.models import Entry
@@ -77,12 +77,13 @@ def unselect(request):
     return HttpResponse('ok')
 
 
-def entry_detail(request, entry_id):
-    entry = get_object_or_404(Entry, id=entry_id)
-    template = entry.get_detail_template()
-    context = {'entry': entry}
-    return render_to_response(template, context,
-                              context_instance=RequestContext(request))
+class EntryDetail(View):
+    def get(self, request, entry_id):
+        entry = get_object_or_404(Entry, id=entry_id)
+        template = entry.get_detail_template()
+        context = {'entry': entry}
+        return render_to_response(template, context,
+                                  context_instance=RequestContext(request))
 
 
 class Download(JSONResponseMixin, View):

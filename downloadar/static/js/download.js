@@ -15,7 +15,7 @@
                 $.post(opts.url, {'entry_id': opts.id}, function(response) {
                     opts.status.trigger(response.status, [response.message]);
                     opts.getDisplay.call(self).html(response.html);
-                    opts.detailPane.trigger('clear_cache', [opts.entryDetailUrl]);
+                    opts.detailPane.trigger('clear_cache');
                     self.removeClass('loading');
                     opts.status.trigger('stop_loading_animation');
                     opts.list.trigger('update', [opts.id]);
