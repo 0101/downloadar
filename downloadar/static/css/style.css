@@ -130,7 +130,7 @@ body {
 #list .more_button.loading {background:url('../img/loading_bar.gif') repeat; opacity:0.3;}
 #list .more_button.disabled {display:none;}
 
-#list .entry {position:relative;line-height:1.45;}
+#list .entry {position:relative;line-height:1.45;overflow:hidden;}
 #list .entry .inner {padding:10px;min-height:35px;}
 /*#list .entry.downloaded {background-color:#F4F4F4;}*/
 #list .entry .title {font-weight:bold;}
